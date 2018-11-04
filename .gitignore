@@ -1,3 +1,27 @@
+target/
+.DS_Store
+bin/
+.classpath
+.project
+.settings/
+.prefs
+*.prefs
+.metadata/
+.springBeans
+*.class
+*.war
+*.ear
+.idea/
+*.iml
+*.iws
+deploy.sh
+test-output/
+.cproject
+nbproject/
+build/
+.factorypath
+.apt_generated
+
 *.class
 
 # Mobile Tools for Java (J2ME)

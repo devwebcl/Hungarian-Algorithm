@@ -1,19 +1,30 @@
+import java.math.BigDecimal;
+
 /**
  * Hungarian Algorithm is a combinatorial optimization algorithm that solves the assignment problem in polynomial time. Link: http://en.wikipedia.org/wiki/Hungarian_algorithm
  * Originally Coded by Amir El Bawab, modified by Ethan J. Eldridge for double matrix 
  * Date: 4 May 2014, Updated Aug 13 2014
  * License: MIT License ~ Please read License.txt for more information about the usage of this software
  * */
-public class HungarianDouble {
-	private double[][] originalValues; // Given values
-	private double[][] values; // Cloned given values to be processed
+
+/**
+ * Based on https://rules.sonarsource.com/java/tag/misra/RSPEC-1244
+ * BigDecimal instead double
+ * 
+ * @author German
+ *
+ */
+
+public class HungarianBigDecimal {
+	private BigDecimal[][] originalValues; // Given values
+	private BigDecimal[][] values; // Cloned given values to be processed
 	private int[][] lines; // Line drawn
 	private int numLines; // Number of line drawn
 	
 	int rows[]; // Index of the column selected by every row (The final result)
 	int occupiedCols[]; // Verify that all column are occupied, used in the optimization step
 	
-	public HungarianDouble(double[][] matrix) {
+	public HungarianBigDecimal(BigDecimal[][] matrix) {
 		// Initialization
 		originalValues = matrix; // Given matrix
 		values = cloneMatrix(matrix); // Cloned matrix to be processed
@@ -29,7 +40,7 @@ public class HungarianDouble {
 			coverZeros();					// Step 3 Again (Condition)
 		}
 
-		//TODO: stuck thread !
+		//TODO: se queda pegado !
 		optimization();						// Optimization
 	}
 	
@@ -38,12 +49,12 @@ public class HungarianDouble {
 	 * Subtract from every element the minimum value from its row
 	 * */
 	public void subtractRowMinimal(){
-		double rowMinValue[] = new double[values.length];
+		BigDecimal rowMinValue[] = new BigDecimal[values.length];
 		//get the minimum for each row and store in rowMinValue[]
 		for(int row=0; row<values.length;row++){
 			rowMinValue[row] = values[row][0];
 			for(int col=1; col<values.length;col++){
-				if(values[row][col] < rowMinValue[row])
+				if(values[row][col].compareTo(rowMinValue[row]) == -1)
 					rowMinValue[row] = values[row][col];
 			}
 		}
@@ -61,7 +72,7 @@ public class HungarianDouble {
 	 * Subtract from every element the minimum value from its column
 	 * */
 	public void subtractColMinimal(){
-		double colMinValue[] = new double[values.length];
+		BigDecimal colMinValue[] = new BigDecimal[values.length];
 		//get the minimum for each column and store them in colMinValue[]
 		for(int col=0; col<values.length;col++){
 			colMinValue[col] = values[0][col];
@@ -149,7 +160,7 @@ public class HungarianDouble {
 	 * Create additional zeros, by coloring the minimum value of uncovered cells (cells not colored by any line)
 	 * */
 	public void createAdditionalZeros(){
-		double minUncoveredValue = 0; // We don't know the value of the first uncovered cell, so we put a joker value 0 (0 is safe, because before this step, all zeros were covered)
+		BigDecimal minUncoveredValue = 0; // We don't know the value of the first uncovered cell, so we put a joker value 0 (0 is safe, because before this step, all zeros were covered)
 		
 		// Find the min in the uncovered numbers
 		for(int row=0; row<values.length;row++){
@@ -223,8 +234,8 @@ public class HungarianDouble {
 	 * Get the sum of the value of the assigned cells for all rows using the original passed matrix, and using the rows array to know the index of the column for each row.
 	 * @return Total values
 	 * */
-	public double getTotal(){
-		double total = 0;
+	public BigDecimal getTotal(){
+		BigDecimal total = 0;
 		for(int row = 0; row < values.length; row++)
 			total += originalValues[row][rows[row]];
 		return total;
@@ -234,8 +245,8 @@ public class HungarianDouble {
 	 * Clone the 2D array
 	 * @return A copy of the 2D array
 	 * */
-	public double[][] cloneMatrix(double[][] matrix){
-		double[][] tmp = new double[matrix.length][matrix.length];
+	public BigDecimal[][] cloneMatrix(BigDecimal[][] matrix){
+		BigDecimal[][] tmp = new BigDecimal[matrix.length][matrix.length];
 		for(int row = 0; row < matrix.length; row++){
 			tmp[row] = matrix[row].clone();
 		}
@@ -246,7 +257,7 @@ public class HungarianDouble {
 	 * Print a 2D array
 	 * @param matrix The target 2D array
 	 * */
-	public void printMatrix(double[][] matrix){
+	public void printMatrix(BigDecimal[][] matrix){
 		for(int row=0; row<matrix.length;row++){
 			for(int col=0; col<matrix.length;col++){
 				System.out.print(matrix[row][col]+"\t");
